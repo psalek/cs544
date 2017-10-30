@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config/>
+	<bean id="accountService" class="edu.mum.cs.cs544.examples.AccountService" />
+	
+	<!-- 
+	<bean id="accountService" class="edu.mum.cs.cs544.examples.AccountService" autowire="byName" />
+ 	-->
+ 	
+	<bean id="accountDAO" class="edu.mum.cs.cs544.examples.AccountDAOImpl"/>
+	<bean id="accountDAOMock" class="edu.mum.cs.cs544.examples.AccountDAOMockImpl" />
+
+</beans>

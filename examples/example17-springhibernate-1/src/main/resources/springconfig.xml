@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="edu.mum.cs.cs544.examples" />
+	<context:annotation-config />
+
+<!-- 
+	<bean id="customerService" class="edu.mum.cs.cs544.examples.service.CustomerServiceImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="customerDAO" ref="customerDAO"></property>
+	</bean>
+
+
+	<bean id="customerDAO" class="edu.mum.cs.cs544.examples.dao.CustomerDAOImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+ -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/sakila" />
+		<property name="username" value="cs544" />
+		<property name="password" value="201511" />
+	</bean>
+
+	<!-- Hibernate 4 Annotation SessionFactory Bean definition -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties" ref="hibernateProperties" />
+		<property name="annotatedClasses">
+			<list>
+				<value>edu.mum.cs.cs544.examples.entity.Address</value>
+				<value>edu.mum.cs.cs544.examples.entity.City</value>
+				<value>edu.mum.cs.cs544.examples.entity.Country</value>
+				<value>edu.mum.cs.cs544.examples.entity.Customer</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="hibernateProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="properties">
+			<props>
+				<!-- <prop key="hibernate.hbm2ddl.auto">create</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="connection.pool.size">1</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

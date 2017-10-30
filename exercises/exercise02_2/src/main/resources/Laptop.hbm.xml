@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+	<class name="cs544.exercise02_2.Laptop" table="laptop">
+		<id name="id" type="long" column="id">
+			<generator class="native"/>
+		</id>
+		<property name="brand" type="string"/>
+		<property name="model" type="string"/>
+		<property name="purchase_date" type="date"/>
+	</class>
+</hibernate-mapping>

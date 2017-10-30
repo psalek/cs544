@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util 
+       http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+       
+	<context:component-scan base-package="service"/>
+	
+	<bean id="shoppingListService" class="cs544.exercise25_1.service.ShoppingListService"/>
+	<bean id="customerService" class="cs544.exercise25_1.service.CustomerService"/>
+		
+	<bean id="shoppingListController" class="cs544.exercise25_1.service.ShoppingListController">
+		<property name="shoppingListService" ref="shoppingListService"/>
+	</bean>
+	
+	<!-- todo: define customerController -->
+	
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+	
+	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="contextPath" value="cs544.exercise25_1.generated.customer:cs544.exercise25_1.generated.shoppingList"/>
+	</bean>	
+
+	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<property name="marshaller" ref="marshaller"/>
+		<property name="unmarshaller" ref="marshaller"/>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<util:list id="beanList">
+				<ref bean="marshallingHttpMessageConverter"/>
+			</util:list>
+		</property>
+	</bean>
+		
+	<bean id="marshalview" class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<property name="contentType" value="text/xml"/>
+		<property name="marshaller" ref="marshaller"/>
+	</bean>
+	
+</beans>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+       
+
+    <!-- JMS Queue Connection Factory -->
+    <bean id="jmsTopicConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate" ref ="jndiTemplate"/>
+        <property name="jndiName" value="ConnectionFactory" />
+    </bean>    
+    <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+        <property name="environment">
+            <props>
+                <prop key="java.naming.factory.initial">
+                    org.jnp.interfaces.NamingContextFactory
+                </prop>
+                <prop key="java.naming.provider.url">
+                    localhost
+                </prop>
+                <prop key="java.naming.factory.url.pkgs">
+                    org.jnp.interfaces:org.jboss.naming
+                </prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="topicDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="jndiName" value="queue/testQueue"/>
+    </bean>
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="jmsTopicConnectionFactory" />
+        <property name="defaultDestination" ref="topicDestination"/>
+        <property name="receiveTimeout" value="5000" />
+   </bean>
+
+
+
+
+   <bean id="jmsSender" class="cs544.exercise24_1.sender.JMSSender">
+        <property name="jmsTemplate" ref="jmsTemplate"/>
+   </bean>
+
+</beans>
+
+

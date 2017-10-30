@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<bean name="welcomeBean"
+		class="edu.mum.cs.cs544.examples.scheduling.spring.HelloWorldPojo">
+		<property name="message" value="Hello World - Quartz Version" />
+	</bean>
+
+<!-- 	<bean id="theJob"
+		class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+		<property name="targetObject" ref="welcomeBean" />
+		<property name="targetMethod" value="welcome" />
+	</bean>
+
+	<bean id="timerTrigger" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<property name="delay" value="5000" />
+		<property name="period" value="5000" />
+		<property name="timerTask" ref="theJob" />
+	</bean>
+
+	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+		<property name="scheduledTimerTasks">
+			<list>
+				<ref bean="timerTrigger" />
+			</list>
+		</property>
+	</bean> -->
+	
+    <!-- For times when you just need to invoke a method on a specific object -->
+    <bean id="simpleJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="welcomeBean" />
+        <property name="targetMethod" value="welcome" />
+    </bean>
+    
+    <!-- Run the job every 5 seconds with initial delay of 2 second -->
+	<bean id="simpleTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="simpleJobDetail" />
+		<property name="startDelay" value="2000" />
+		<property name="repeatInterval" value="5000" />
+	</bean>
+	
+	<!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="simpleJobDetail" />
+			</list>
+		</property>
+
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

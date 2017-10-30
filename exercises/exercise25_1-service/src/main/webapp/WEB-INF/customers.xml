@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers xmlns="http://springtraining/customers">
+	<customer customerNumber="ABC123456">John Doe</customer>
+	<customer customerNumber="CBA123654">Frank Brown</customer>
+	<customer customerNumber="BCA321456">Jane Brown</customer>
+</customers>

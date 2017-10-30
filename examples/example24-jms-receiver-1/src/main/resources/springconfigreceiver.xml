@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+		<property name="environment">
+			<props>
+				<prop key="java.naming.factory.initial">
+					org.jnp.interfaces.NamingContextFactory
+				</prop>
+				<prop key="java.naming.provider.url">
+					localhost
+				</prop>
+				<prop key="java.naming.factory.url.pkgs">
+					org.jnp.interfaces:org.jboss.naming
+				</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- JMS Queue Connection Factory -->
+	<bean id="jmsQueueConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="jndiName" value="ConnectionFactory" />
+	</bean>
+	
+	<bean id="queueDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="jndiName" value="queue/exampleQueue" />
+	</bean>
+	
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="jmsQueueConnectionFactory" />
+		<property name="defaultDestination" ref="queueDestination" />
+		<property name="receiveTimeout" value="5000" />
+	</bean>
+	
+	<bean id="messageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="jmsQueueConnectionFactory" />
+		<property name="destination" ref="queueDestination" />
+		<property name="messageListener" ref="messageListener" />
+	</bean>
+	
+	<bean id="messageListener" class="edu.mum.cs.cs544.examples.JMSReceiver" />
+</beans>
