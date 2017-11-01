@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class Customer {
@@ -20,8 +20,8 @@ public class Customer {
 	private String firstName;
 	private String lastName;
 
-	@OneToMany //(mappedBy="owner")
-	@JoinColumn(name="customerId")
+	@OneToMany(mappedBy="owner")
+	@OrderColumn(name="sequence")
 	private List<Car> cars = new ArrayList<Car>();
 
 	public Customer() {
@@ -65,6 +65,10 @@ public class Customer {
         cars.remove(c);
     }
     
+	public List<Car> getCars() {
+		return cars;
+	}
+
 	@Override
 	public String toString() {
 		return firstName + " " + lastName;

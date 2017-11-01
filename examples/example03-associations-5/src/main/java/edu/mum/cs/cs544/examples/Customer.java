@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class Customer {
@@ -23,6 +24,7 @@ public class Customer {
 
 	@OneToMany(cascade=CascadeType.ALL)//, mappedBy="owner")
 	@JoinColumn(name="customerId")
+	@OrderColumn(name="sequence")
 	private List<Car> cars = new ArrayList<Car>();
 
 	public Customer() {
@@ -66,6 +68,10 @@ public class Customer {
         cars.remove(car);
     }
     
+	public List<Car> getCars() {
+		return cars;
+	}
+
 	@Override
 	public String toString() {
 		return firstName + " " + lastName;

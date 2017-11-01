@@ -36,10 +36,15 @@ public class AppCar {
             session.persist(john);
 
             Car car1 = new Car("BMW", "2015", 30221.00, john);
-            session.persist(car1);
-
             Car car2 = new Car("Mercedes", "2016", 4088.00, john);
+            Car car3 = new Car("Toyota", "2018", 24000.00, john);
+            
+            System.out.println("\nList of Cars in memory:");
+            john.getCars().forEach(System.out::println);
+
             session.persist(car2);
+            session.persist(car1);
+            session.persist(car3);
 
             session.save(john);
 
@@ -64,7 +69,7 @@ public class AppCar {
             @SuppressWarnings("unchecked")
             List<Car> carList = session.createQuery("from Car").list();
 
-            System.out.println("\nList of cars:\n");
+            System.out.println("\nList of cars from database:\n");
             for (Car car : carList) {
                 System.out.println(car);
             }

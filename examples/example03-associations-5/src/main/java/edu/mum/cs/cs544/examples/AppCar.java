@@ -33,16 +33,23 @@ public class AppCar {
             tx = session.beginTransaction();
             
             Customer john = new Customer("John", "Doe");
+            session.save(john);
 
             Car car1 = new Car("BMW", "2015", 30221.00);
-
             Car car2 = new Car("Mercedes", "2016", 4088.00);
+            Car car3 = new Car("Toyota", "2018", 24000.00);
             
             john.addCar(car1);
             john.addCar(car2);
+            john.addCar(car3);
             
-            session.save(john);
-
+            System.out.println("\nList of cars in memory:");
+            john.getCars().forEach(System.out::println);
+            
+//            session.persist(car2);
+//            session.persist(car1);
+//            session.persist(car3);
+            
             tx.commit();
 
         } catch (HibernateException e) {

@@ -17,7 +17,7 @@ public class Car {
 	private double price;
 	
 	@ManyToOne
-	@JoinColumn(name="customerId", updatable=false, insertable=false)
+	@JoinColumn(name="customerId")
 	private Customer owner;
 
 	public Car() {
